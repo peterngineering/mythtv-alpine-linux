@@ -1,0 +1,74 @@
+diff --git a/mythtv/libs/libmythbase/remotefile.cpp b/mythtv/libs/libmythbase/remotefile.cpp
+index 3e769d5759..5d0194a668 100644
+--- a/mythtv/libs/libmythbase/remotefile.cpp
++++ b/mythtv/libs/libmythbase/remotefile.cpp
+@@ -787,14 +787,14 @@ long long RemoteFile::SeekInternal(long long pos, int whence, long long curpos)
+         }
+         else if (whence == SEEK_CUR)
+         {
+-            offset = ((curpos > 0) ? curpos : ::lseek64(m_localFile, 0, SEEK_CUR)) + pos;
++            offset = ((curpos > 0) ? curpos : ::lseek(m_localFile, 0, SEEK_CUR)) + pos;
+         }
+         else
+         {
+             return -1;
+         }
+ 
+-        off64_t localpos = ::lseek64(m_localFile, pos, whence);
++        off64_t localpos = ::lseek(m_localFile, pos, whence);
+         if (localpos != pos)
+         {
+             LOG(VB_FILE, LOG_ERR,
+diff --git a/mythtv/libs/libmythtv/io/mythfilebuffer.cpp b/mythtv/libs/libmythtv/io/mythfilebuffer.cpp
+index 329869586e..49f0e05c95 100644
+--- a/mythtv/libs/libmythtv/io/mythfilebuffer.cpp
++++ b/mythtv/libs/libmythtv/io/mythfilebuffer.cpp
+@@ -661,7 +661,7 @@ long long MythFileBuffer::SeekInternal(long long Position, int Whence)
+                 }
+                 else
+                 {
+-                    ret = lseek64(m_fd2, m_internalReadPos, SEEK_SET);
++                    ret = lseek(m_fd2, m_internalReadPos, SEEK_SET);
+ #ifndef _MSC_VER
+                     if (posix_fadvise(m_fd2, m_internalReadPos, static_cast<off_t>(128)*1024, POSIX_FADV_WILLNEED) != 0)
+                         LOG(VB_FILE, LOG_DEBUG, LOC + QString("Seek(): fadvise willneed failed: ") + ENO);
+@@ -748,7 +748,7 @@ long long MythFileBuffer::SeekInternal(long long Position, int Whence)
+             if (m_remotefile)
+                 ret = m_remotefile->Seek(m_ignoreReadPos, SEEK_SET);
+             else
+-                ret = lseek64(m_fd2, m_ignoreReadPos, SEEK_SET);
++                ret = lseek(m_fd2, m_ignoreReadPos, SEEK_SET);
+ 
+             if (ret < 0)
+             {
+@@ -764,7 +764,7 @@ long long MythFileBuffer::SeekInternal(long long Position, int Whence)
+                 if (m_remotefile)
+                     ret = m_remotefile->Seek(m_internalReadPos, SEEK_SET);
+                 else
+-                    ret = lseek64(m_fd2, m_internalReadPos, SEEK_SET);
++                    ret = lseek(m_fd2, m_internalReadPos, SEEK_SET);
+                 if (ret < 0)
+                 {
+                     QString cmd2 = QString("Seek(%1, SEEK_SET) int ")
+@@ -809,7 +809,7 @@ long long MythFileBuffer::SeekInternal(long long Position, int Whence)
+     }
+     else
+     {
+-        ret = lseek64(m_fd2, Position, Whence);
++        ret = lseek(m_fd2, Position, Whence);
+     }
+ 
+     if (ret >= 0)
+diff --git a/mythtv/libs/libmythtv/io/mythmediabuffer.cpp b/mythtv/libs/libmythtv/io/mythmediabuffer.cpp
+index f67dec7766..9b8f232fbb 100644
+--- a/mythtv/libs/libmythtv/io/mythmediabuffer.cpp
++++ b/mythtv/libs/libmythtv/io/mythmediabuffer.cpp
+@@ -1279,7 +1279,7 @@ int MythMediaBuffer::ReadDirect(void *Buffer, int Count, bool Peek)
+             if (m_remotefile)
+                 cur_pos = m_remotefile->Seek(oldposition, SEEK_SET);
+             else if (m_fd2 >= 0)
+-                cur_pos = lseek64(m_fd2, oldposition, SEEK_SET);
++                cur_pos = lseek(m_fd2, oldposition, SEEK_SET);
+             if (cur_pos < 0)
+             {
+                 LOG(VB_FILE, LOG_ERR, LOC + "Seek failed repositioning to previous position");
