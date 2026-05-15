@@ -21,7 +21,9 @@ mythtv on alpine linux so far only tested on arm 32bit(armv7).
     * Test package installs on minimal images
     * Upload configuration sources
     * Update readme to include compile steps/runtime steps
-    * Make release pkg
+    * Make release pkgs for arm/aarch64/x86_64
+
+    * * *
     * repeat for fixes/36
     
 
