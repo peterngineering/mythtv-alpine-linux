@@ -1,5 +1,5 @@
 diff --git a/mythtv/libs/libmythbase/remotefile.cpp b/mythtv/libs/libmythbase/remotefile.cpp
-index 3e769d5759..5d0194a668 100644
+index 3e769d5759..41fc114270 100644
 --- a/mythtv/libs/libmythbase/remotefile.cpp
 +++ b/mythtv/libs/libmythbase/remotefile.cpp
 @@ -787,14 +787,14 @@ long long RemoteFile::SeekInternal(long long pos, int whence, long long curpos)
@@ -15,7 +15,7 @@ index 3e769d5759..5d0194a668 100644
          }
  
 -        off64_t localpos = ::lseek64(m_localFile, pos, whence);
-+        off64_t localpos = ::lseek(m_localFile, pos, whence);
++        off_t localpos = ::lseek(m_localFile, pos, whence);
          if (localpos != pos)
          {
              LOG(VB_FILE, LOG_ERR,
